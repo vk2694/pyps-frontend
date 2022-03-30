@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RolePermission } from "../Context/RolePermission";
 import { getUserList } from "../Helper/service";
 
 function Home() {
-  const [role_type, setRoleType] = useState("");
   const { roleData, setRoleData } = useContext(RolePermission);
   const [user, setUserData] = useState([]);
+  const navigate = useNavigate();
+
   const admin = {
     project: {
       create: 1,
@@ -50,28 +51,31 @@ function Home() {
     },
   };
 
+  // Fetching the UserList from API
   useEffect(() => {
-
-
     getUserList()
       .then((res) => {
         if (res["status"] == 200) {
-          setUserData(res.data.response);          
-          if (user?.user_type === "Admin") {
-            setRoleData(admin);
-          }
-          if (user?.user_type === "Manager") {
-            setRoleData(manager);
-          }
-          if (user?.user_type === "Developer") {
-            setRoleData(developer);
-          }
+          setUserData(res.data.response);         
         }
       })
       .catch((err) => {
         console.log(`Error on server! ${err}`);
       });
-  }, [role_type]);
+  }, []);
+
+  function navigateToProjectPage(user_type) {
+    if (user_type === "Admin") {
+      setRoleData(admin);
+    }
+    if (user_type === "Manager") {
+      setRoleData(manager);
+    }
+    if (user_type === "Developer") {
+      setRoleData(developer);
+    }
+    navigate('/project');
+  }
 
   return (
     <div className="my-16">
@@ -132,10 +136,9 @@ function Home() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {user?.user_type}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <Link to={'./project'}>
-                            view
-                          </Link>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-indigo-600 hover:text-indigo-900"
+                        onClick={() => navigateToProjectPage(user?.user_type)}>                          
+                            view                          
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <a

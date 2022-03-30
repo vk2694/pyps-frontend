@@ -62,7 +62,7 @@ export const deleteUser = async(user_id) => {
 
 
 // Get the list of Project.
-export const getProjectList = async() => {
+export const getProjects = async() => {
     const url = `form/v1/project?${Date.now()}`;
     let project_data;
     try {

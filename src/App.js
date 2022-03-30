@@ -8,7 +8,7 @@ import Task from "./components/task";
 import { RolePermission } from "./Context/RolePermission";
 
 function App() {
-  const [roleData, setRoleData] = useState();
+  const [roleData, setRoleData] = useState([]);
   return (
     <BrowserRouter>
       <RolePermission.Provider value={{ roleData, setRoleData }}>
